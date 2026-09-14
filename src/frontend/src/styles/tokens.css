@@ -1,0 +1,137 @@
+/* =============================================================================
+   THREAT INTELLIGENCE COMMAND CENTER — DESIGN TOKENS
+   Team elevateX · IBM BOBATHON 2026 · Problem D2
+   -----------------------------------------------------------------------------
+   Visual language: dark, dense, professional security-operations console.
+   Deliberately NOT used: neon glow, heavy gradients, decorative chrome.
+
+   TWO SEPARATE ENCODINGS — these must never be visually confused:
+     SEVERITY   = "how bad is this?"        -> warm hue ramp + SHAPE glyph + label
+     CONFIDENCE = "how sure are we?"        -> cool teal + METER bar form factor
+   Severity is never communicated by colour alone. Every severity surface pairs
+   colour with a distinct geometric glyph (--sev-*-glyph) and a text label.
+============================================================================= */
+
+:root {
+  /* ── Background layers ────────────────────────────────────────────────── */
+  --color-bg-base: #0a0e13;          /* app canvas / deepest layer          */
+  --color-bg-surface: #111820;       /* cards, panels, table bodies         */
+  --color-bg-elevated: #19222d;      /* popovers, hovered rows, raised rows */
+  --color-bg-inset: #070a0e;         /* wells, code blocks, inset regions   */
+  --color-bg-hover: #1e2935;         /* interactive hover wash              */
+
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --color-text-primary: #e8eff6;
+  --color-text-secondary: #9db0c3;
+  --color-text-muted: #667c90;
+  --color-text-inverse: #0a0e13;
+
+  /* ── Structure ────────────────────────────────────────────────────────── */
+  --color-border: #243141;
+  --color-border-strong: #33455a;
+  --color-divider: #1a2430;
+
+  /* ── SEVERITY ramp — warm hue progression, always paired with a glyph ─── */
+  --color-critical: #ff5c5c;
+  --color-critical-bg: rgba(255, 92, 92, 0.12);
+  --color-critical-border: rgba(255, 92, 92, 0.42);
+
+  --color-high: #ff8f3f;
+  --color-high-bg: rgba(255, 143, 63, 0.12);
+  --color-high-border: rgba(255, 143, 63, 0.42);
+
+  --color-medium: #f2c14e;
+  --color-medium-bg: rgba(242, 193, 78, 0.12);
+  --color-medium-border: rgba(242, 193, 78, 0.40);
+
+  --color-low: #7d90a6;
+  --color-low-bg: rgba(125, 144, 166, 0.14);
+  --color-low-border: rgba(125, 144, 166, 0.42);
+
+  /* Non-colour severity cue: distinct GEOMETRIC SHAPES.
+     Readable by colourblind users and in greyscale/projector conditions.   */
+  --sev-critical-glyph: "\25C6";     /* ◆ filled diamond */
+  --sev-high-glyph: "\25B2";         /* ▲ filled triangle */
+  --sev-medium-glyph: "\25A0";       /* ■ filled square */
+  --sev-low-glyph: "\25CF";          /* ● filled circle */
+
+  /* ── CONFIDENCE — cool teal, deliberately outside the severity ramp ───── */
+  --color-confidence: #2ec4b6;
+  --color-confidence-bg: rgba(46, 196, 182, 0.12);
+  --color-confidence-border: rgba(46, 196, 182, 0.40);
+  --color-confidence-track: #1d2b33;
+
+  /* ── Accent / primary action ──────────────────────────────────────────── */
+  --color-accent: #4c8dff;
+  --color-accent-hover: #649dff;
+  --color-accent-active: #3a76e0;
+  --color-accent-bg: rgba(76, 141, 255, 0.12);
+  --color-accent-border: rgba(76, 141, 255, 0.45);
+
+  /* ── Status / process feedback (not severity, not confidence) ─────────── */
+  --color-success: #3fb950;
+  --color-success-bg: rgba(63, 185, 80, 0.12);
+  --color-danger: #ff5c5c;
+  --color-warning: #f2c14e;
+  --color-demo: #d29922;             /* demo-mode banner */
+  --color-demo-bg: rgba(210, 153, 34, 0.14);
+  --color-demo-border: rgba(210, 153, 34, 0.50);
+
+  /* ── Focus ────────────────────────────────────────────────────────────── */
+  --color-focus-ring: #7fb0ff;
+  --focus-ring: 0 0 0 2px var(--color-bg-base), 0 0 0 4px var(--color-focus-ring);
+
+  /* ── Typography ───────────────────────────────────────────────────────── */
+  --font-ui: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Mono", Consolas,
+    "Liberation Mono", monospace;
+
+  --text-2xs: 0.6875rem;  /* 11px — table meta, chip text     */
+  --text-xs: 0.75rem;     /* 12px — labels, captions          */
+  --text-sm: 0.8125rem;   /* 13px — table body, dense UI      */
+  --text-base: 0.9375rem; /* 15px — body copy                 */
+  --text-md: 1.0625rem;   /* 17px — BLUF body                 */
+  --text-lg: 1.25rem;     /* 20px — panel titles              */
+  --text-xl: 1.5rem;      /* 24px — page titles               */
+  --text-2xl: 2rem;       /* 32px — stat values               */
+  --text-3xl: 2.5rem;     /* 40px — hero stat values          */
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.4;
+  --leading-normal: 1.6;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-wide: 0.06em;   /* uppercase eyebrow labels */
+  --tracking-wider: 0.1em;
+
+  /* ── Spacing — 4px base unit ──────────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ── Radius / elevation ───────────────────────────────────────────────── */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+
+  /* ── Layout ───────────────────────────────────────────────────────────── */
+  --layout-max-width: 1680px;
+  --nav-height: 56px;
+}
