@@ -9,51 +9,63 @@
 # =============================================================================
 
 team:
-  name: ""                             # REQUIRED — e.g., "Orion Squad"
-  track: ""                            # REQUIRED — one of: AI | DevOps | Sustainability | Open
+  name: "elevateX"                             # REQUIRED — e.g., "Orion Squad"
+  track: "AI"                            # REQUIRED — one of: AI | DevOps | Sustainability | Open
   lead:
-    name: ""                           # REQUIRED — e.g., "Alice Chen"
-    email: ""                          # REQUIRED — e.g., "alice.chen@ibm.com"
+    name: "Harshil Kalsariya"                           # REQUIRED — e.g., "Alice Chen"
+    email: "24ce049@charusat.edu.in"                          # REQUIRED — e.g., "alice.chen@ibm.com"
   members:
-    - name: ""                         # REQUIRED — Team member 1
-      email: ""
-    - name: ""                         # Add more members by copying the two lines above
-      email: ""
-    - name: ""
-      email: ""
+    - name: "Pranav Dabhi"                         # REQUIRED — Team member 1
+      email: "24ce020@charusat.edu.in"
+    - name: "Jenil Viradia"                         # Add more members by copying the two lines above
+      email: "24ce141@charusat.edu.in"
+    - name: "Shivam Prajapati"
+      email: "24ce098@charusat.edu.in"
 
 submission:
-  title: ""                            # REQUIRED — Project display name, e.g., "SmartOps Dashboard"
+  title: "D2 Threat Intelligence Command Center"                            # REQUIRED — Project display name, e.g., "SmartOps Dashboard"
 
   problem_statement: >                 # REQUIRED — 1-3 sentences. What problem? Who has it?
-    Replace this text with a concise description of the real-world problem
-    your project addresses and who experiences it.
+    Defence analysts receive thousands of alerts every day from SIEM systems,
+    satellite feeds, cyber sensors, and intelligence reports in different
+    formats. Manually correlating these alerts makes it difficult to
+    distinguish genuine threats from false positives, while commanders need
+    concise and prioritised threat assessments in BLUF format.
 
   solution_summary: >                  # REQUIRED — 1-3 sentences. What did you build?
-    Replace this text with a clear description of your solution
-    and how it addresses the problem above.
+    We are building an AI-powered threat intelligence assistant that ingests
+    and normalizes multi-source threat alerts, correlates related events into
+    incidents, prioritises threats using explainable scoring, maps attacker
+    behaviour to MITRE ATT&CK, and generates evidence-grounded BLUF summaries
+    with recommended actions. IBM Bob is integrated into the solution workflow
+    to support AI-assisted threat investigation and decision support.
 
   key_features:                        # REQUIRED — List 3 to 5 specific features you implemented
-    - ""                               # e.g., "Real-time pipeline anomaly detection using watsonx.ai"
-    - ""
-    - ""
-    - ""                               # optional 4th
-    - ""                               # optional 5th
+    - "Multi-source threat alert ingestion and normalization"
+    - "Explainable correlation of related alerts into incidents"
+    - "Threat prioritization with severity and confidence scoring"
+    - "MITRE ATT&CK technique mapping with evidence"
+    - "Evidence-grounded BLUF summaries and recommended actions"                           # optional 5th
 
   tech_stack:
-    languages: []                      # REQUIRED — e.g., ["Python", "TypeScript"]
-    frameworks: []                     # e.g., ["FastAPI", "React"]
-    ibm_technologies: []               # e.g., ["watsonx.ai", "IBM Bob", "IBM Cloud Functions"]
-    databases: []                      # e.g., ["PostgreSQL", "Redis"]
-    other: []                          # e.g., ["Docker", "GitHub Actions", "Slack API"]
+    languages: ["Python","TypeScript"]                      # REQUIRED — e.g., ["Python", "TypeScript"]
+    frameworks: ["FastAPI","React","Vite"]                     # e.g., ["FastAPI", "React"]
+    ibm_technologies: ["IBM Bob","IBM watsonx.ai"]               # e.g., ["watsonx.ai", "IBM Bob", "IBM Cloud Functions"]
+    databases: ["SQLite"]                      # e.g., ["PostgreSQL", "Redis"]
+    other: ["MITRE ATT&CK" , "REST API","Docker" , "GitHub Actions"]                          # e.g., ["Docker", "GitHub Actions", "Slack API"]
 
   what_we_are_most_proud_of: >         # Optional but recommended — guides judges to your best work
-    Replace with what aspect of the submission you consider strongest
-    and want judges to pay special attention to.
+    Our strongest work is the evidence-grounded intelligence pipeline that
+    transforms large volumes of noisy multi-source alerts into prioritised
+    incidents, explains why alerts were correlated, maps attacker behaviour
+    to MITRE ATT&CK, and produces concise BLUF summaries that help commanders
+    understand what happened, why it matters, and what should be investigated.
 
   known_limitations: >                 # Optional but recommended — be honest about gaps
-    Replace with any known limitations, incomplete features,
-    or shortcuts taken due to time constraints.
+    The prototype uses synthetic threat data and a focused MITRE ATT&CK
+    mapping suitable for the demonstration rather than a complete production
+    threat intelligence deployment. Some integrations and operational
+    security controls are simplified for the hackathon environment.
 
 # =============================================================================
 # ARTIFACT LOCATIONS
