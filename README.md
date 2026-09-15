@@ -13,7 +13,7 @@ Defence and security analysts receive thousands of alerts every day from SIEM sy
 
 ## Solution
 
-The D2 Threat Intelligence Command Center ingests multi-source threat data, normalises it into a canonical Alert schema, correlates related events into Incidents, scores and prioritises them, maps attacker behaviour to MITRE ATT&CK, and produces evidence-grounded BLUF summaries with recommended actions. A React dashboard presents the alerts, incidents, evidence, MITRE mappings, and recommended actions.
+The D2 Threat Intelligence Command Center ingests multi-source threat data, normalises it into a canonical Alert schema, correlates related events into incidents, scores and prioritises them, maps attacker behaviour to MITRE ATT&CK, and produces evidence-grounded BLUF summaries with recommended actions. The current prototype keeps a deterministic intelligence engine as the authoritative layer and exposes a bounded optional AI-provider interface for future model-assisted explanation work. This is a focused demo prototype, not a production deployment with live external runtime integration. A React dashboard presents the alerts, incidents, evidence, MITRE mappings, and recommended actions.
 
 ## Key Features
 
@@ -29,7 +29,7 @@ The D2 Threat Intelligence Command Center ingests multi-source threat data, norm
 |---|---|
 | Languages | Python, TypeScript |
 | Backend | FastAPI, SQLAlchemy, SQLite |
-| Intelligence | Deterministic Python pipeline with Groq (cloud) and IBM Granite (local Ollama) AI providers |
+| Intelligence | Deterministic Python correlation, scoring, MITRE mapping, and BLUF pipeline with an optional bounded AI provider interface |
 | Frontend | React, Vite, TypeScript |
 | Tooling | Docker, Docker Compose, GitHub Actions |
 
@@ -117,20 +117,23 @@ Example request and response payloads are documented in [`src/backend/docs/examp
 
 ## IBM Technologies
 
-- **IBM Granite**: IBM's open-source foundation model, available as an optional local AI provider via Ollama (`AI_PROVIDER=granite`). No IBM cloud credentials required. IBM Granite models run on the operator's own hardware through Ollama's OpenAI-compatible API.
-- **IBM Bob**: Used throughout the development lifecycle — architecture design, intelligence engine review, AI provider implementation (Groq + IBM Granite), grounded prompt engineering, test suite authorship, documentation, and security review. See [`docs/ibm-bob-contribution.md`](docs/ibm-bob-contribution.md).
+- **IBM Bob**: Used as an engineering partner during architecture design, review, prompt engineering, validation, and documentation. Its contribution is within the development lifecycle and is documented in [`docs/ibm-bob-contribution.md`](docs/ibm-bob-contribution.md).
+- **Optional AI model experiments**: The codebase includes bounded adapter patterns for Groq and IBM Granite/Ollama evaluation. These are not required for the default demo path and are not presented as a live IBM runtime deployment in this prototype.
+- **Deterministic-first execution**: The shipped solution remains grounded in the deterministic intelligence engine. The AI layer is optional and secondary, and it does not replace the core threat-correlation logic.
 
 ## AI Providers
 
-- **Groq** (`AI_PROVIDER=groq`): Cloud inference via Groq API. Requires `GROQ_API_KEY`. Default model: `llama-3.1-8b-instant`.
-- **IBM Granite via Ollama** (`AI_PROVIDER=granite`): Local inference using IBM open-source Granite models through Ollama. Requires `GRANITE_ENABLED=true` and Ollama running locally with a Granite model pulled.
-- **Deterministic** (default): No external AI call; uses the deterministic BLUF from the intelligence engine.
+- **Deterministic** (default and recommended for the demo): No external AI call; uses the deterministic BLUF from the intelligence engine.
+- **Groq** (`AI_PROVIDER=groq`): Optional cloud-inference path for experimentation and future explanation augmentation. Requires `GROQ_API_KEY`.
+- **IBM Granite via Ollama** (`AI_PROVIDER=granite`): Optional local provider path for experimentation. Requires `GRANITE_ENABLED=true` and a local Ollama instance with a Granite model pulled.
 
-All providers are subject to the same grounding validator — neither can invent security facts.
+All provider paths are subject to the same grounding validator — none can invent security facts. The prototype does not depend on any live IBM runtime to function, and the deterministic pipeline remains the default, production-safe path.
 
 ## Known Limitations
 
 - The demo uses synthetic threat data.
 - MITRE ATT&CK coverage is focused on the demonstrated attack chain rather than the full framework.
+- The demo remains deterministic-first; optional AI provider adapters are not required for the core workflow.
+- No live IBM runtime integration is implemented in the current prototype; the AI layer is bounded and future-facing.
 - The Groq AI provider requires a `GROQ_API_KEY`; IBM Granite requires Ollama running locally. The deterministic BLUF is always the fallback.
 - Operational security controls are simplified for the hackathon environment.
