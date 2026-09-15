@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ALT-1001",
+    "timestamp": "2026-09-14T10:20:00Z",
+    "source": "SIEM",
+    "event_type": "network_connection",
+    "severity": "high",
+    "source_ip": "203.0.113.55",
+    "destination_ip": "10.10.5.17",
+    "host": "SERVER-17",
+    "user": "admin",
+    "description": "Unusual inbound connection from external IP to SERVER-17"
+  },
+  {
+    "id": "ALT-1002",
+    "timestamp": "2026-09-14T10:32:00Z",
+    "source": "ENDPOINT_SENSOR",
+    "event_type": "process_execution",
+    "severity": "high",
+    "source_ip": null,
+    "destination_ip": null,
+    "host": "SERVER-17",
+    "user": "admin",
+    "description": "PowerShell launched with encoded command"
+  },
+  {
+    "id": "ALT-1003",
+    "timestamp": "2026-09-14T10:40:00Z",
+    "source": "ENDPOINT_SENSOR",
+    "event_type": "credential_access",
+    "severity": "critical",
+    "source_ip": null,
+    "destination_ip": null,
+    "host": "SERVER-17",
+    "user": "admin",
+    "description": "Credential access behavior targeting LSASS"
+  },
+  {
+    "id": "ALT-1004",
+    "timestamp": "2026-09-14T10:47:00Z",
+    "source": "NETWORK_SENSOR",
+    "event_type": "remote_connection",
+    "severity": "high",
+    "source_ip": "10.10.5.17",
+    "destination_ip": "10.10.5.12",
+    "host": "SERVER-17",
+    "user": "admin",
+    "description": "Outbound RDP session from SERVER-17 to SERVER-12"
+  },
+  {
+    "id": "ALT-1005",
+    "timestamp": "2026-09-14T09:12:00Z",
+    "source": "SIEM",
+    "event_type": "authentication_failure",
+    "severity": "low",
+    "source_ip": "10.10.2.41",
+    "destination_ip": "10.10.2.10",
+    "host": "WORKSTATION-04",
+    "user": "jpatel",
+    "description": "Single failed login after password change"
+  }
+]
