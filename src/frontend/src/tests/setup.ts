@@ -14,3 +14,21 @@ vi.stubEnv('VITE_API_BASE_URL', 'http://localhost:8000');
 beforeEach(() => {
   vi.clearAllMocks();
 });
+
+/**
+ * jsdom does not implement matchMedia, which the appearance layer probes for
+ * the OS light/dark preference. The default stub reports "no preference", so
+ * the suite runs on the dark console unless a test overrides it.
+ */
+if (typeof window !== 'undefined' && !window.matchMedia) {
+  window.matchMedia = ((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener() {},
+    removeListener() {},
+    addEventListener() {},
+    removeEventListener() {},
+    dispatchEvent: () => false,
+  })) as typeof window.matchMedia;
+}

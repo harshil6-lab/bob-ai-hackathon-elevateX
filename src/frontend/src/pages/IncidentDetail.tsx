@@ -3,8 +3,10 @@
  *
  * Answers the five investigation questions in descending visual priority:
  *   1. What happened and why does it matter?  -> BLUF (most prominent)
- *   2. How bad / how sure / where is it?      -> severity, confidence, status
- *   3. What is affected?                      -> assets, alert count, sources
+ *   2. How bad / how sure / what is affected? -> one facts strip, read in a
+ *                                                single pass
+ *   3. How did it unfold?                     -> attack chain, only where the
+ *                                                MITRE data supports it
  *   4. What proves it?                        -> evidence
  *   5. What technique, and what do I do?      -> MITRE, recommended actions
  */
@@ -80,16 +82,40 @@ export function IncidentDetail() {
 
   /* ── Populated ────────────────────────────────────────────────────────── */
 
+  // Ordered unique tactics for the attack chain, derived from the MITRE
+  // techniques the API actually returned. Stages are never invented: an
+  // incident whose techniques carry no tactic renders no chain at all.
+  const tacticOrder = [
+    'Reconnaissance', 'Resource Development', 'Initial Access', 'Execution',
+    'Persistence', 'Privilege Escalation', 'Defense Evasion', 'Credential Access',
+    'Discovery', 'Lateral Movement', 'Collection', 'Command and Control', 'Exfiltration', 'Impact',
+  ];
+  const presentTactics = (() => {
+    if (!incident.mitre_techniques?.length) return [];
+    const seen = new Set<string>();
+    const result: string[] = [];
+    for (const order of tacticOrder) {
+      if (incident.mitre_techniques.some((t) => {
+        const tactic = typeof t === 'string' ? null : (t as { tactic?: string }).tactic;
+        return tactic === order;
+      })) {
+        if (!seen.has(order)) { seen.add(order); result.push(order); }
+      }
+    }
+    return result;
+  })();
+
   return (
     <div className="page">
       <Breadcrumbs id={incident.id} />
 
       <div className="page-header detail-header">
         <div className="page-title-group">
-          <div className="page-eyebrow">Investigation</div>
-          <h1 className="detail-title">
-            <span className="mono">{incident.id}</span>
-          </h1>
+          <div className="page-eyebrow">Incident investigation</div>
+          <div className="detail-identity">
+            <h1 className="detail-title">{incident.id}</h1>
+            <SeverityBadge severity={incident.severity} size="lg" />
+          </div>
         </div>
         <button type="button" className="btn" onClick={() => navigate('/incidents')}>
           ← Back to incidents
@@ -99,47 +125,67 @@ export function IncidentDetail() {
       {/* 1. BLUF — the single most prominent element on the page. */}
       <BlufPanel bluf={incident.bluf} />
 
-      {/* 2. Severity, confidence and status: together, but never conflated. */}
-      <section className="assessment" aria-label="Threat assessment">
-        <div className="assessment__cell">
+      {/*
+        2. Assessment and context in ONE strip. Severity and confidence stay
+        formally distinct — a shaped badge answering "how bad", a teal meter
+        answering "how sure" — but they are read in a single pass alongside
+        what is affected, rather than spread across three separate blocks.
+      */}
+      <section className="incident-facts" aria-label="Threat assessment and context">
+        <div className="incident-facts__cell">
           <span className="metric-label">Severity</span>
-          <SeverityBadge severity={incident.severity} size="lg" />
-          <p className="assessment__note">How damaging this is if genuine.</p>
+          <SeverityBadge severity={incident.severity} />
+          <p className="incident-facts__note">How damaging this is if genuine.</p>
         </div>
-        <div className="assessment__cell assessment__cell--confidence">
+        <div className="incident-facts__cell incident-facts__cell--confidence">
           <ConfidenceIndicator confidence={incident.confidence} />
-          <p className="assessment__note">
+          <p className="incident-facts__note">
             How certain the correlation is. Independent of severity.
           </p>
         </div>
-        <div className="assessment__cell">
+        <div className="incident-facts__cell">
           <span className="metric-label">Status</span>
-          <span className="status-pill status-pill--lg">{incident.status}</span>
-          <p className="assessment__note">Current position in the response workflow.</p>
+          <span className="status-pill">{incident.status}</span>
+          <p className="incident-facts__note">Position in the response workflow.</p>
         </div>
-      </section>
-
-      {/* 3. Investigation context. */}
-      <section className="context-strip" aria-label="Investigation context">
-        <div className="context-strip__item">
+        <div className="incident-facts__cell incident-facts__cell--wide">
           <span className="metric-label">Affected assets</span>
-          <span className="context-strip__value mono">
+          <span className="incident-facts__value mono">
             {incident.affected_assets?.length
               ? incident.affected_assets.join(', ')
               : 'None reported'}
           </span>
         </div>
-        <div className="context-strip__item">
+        <div className="incident-facts__cell">
           <span className="metric-label">Correlated alerts</span>
-          <span className="context-strip__value mono">{incident.alert_count}</span>
+          <span className="incident-facts__value mono">{incident.alert_count}</span>
         </div>
-        <div className="context-strip__item">
+        <div className="incident-facts__cell incident-facts__cell--wide">
           <span className="metric-label">Contributing sources</span>
-          <span className="context-strip__value mono">
+          <span className="incident-facts__value mono">
             {incident.sources?.length ? incident.sources.join(', ') : 'None reported'}
           </span>
         </div>
       </section>
+
+      {/* 3. Attack chain — purely the tactics present in the returned data. */}
+      {presentTactics.length > 0 ? (
+        <div className="attack-chain" aria-label="Attack chain stages">
+          <span className="attack-chain__label">
+            Attack chain <span className="attack-chain__source">from mapped ATT&amp;CK tactics</span>
+          </span>
+          <div className="attack-chain__stages">
+            {presentTactics.map((tactic, i) => (
+              <span key={tactic} style={{ display: 'contents' }}>
+                {i > 0 ? (
+                  <span className="attack-chain__arrow" aria-hidden="true">→</span>
+                ) : null}
+                <span className="attack-chain__stage">{tactic}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       <div className="detail-grid">
         {/* 4. Evidence. */}

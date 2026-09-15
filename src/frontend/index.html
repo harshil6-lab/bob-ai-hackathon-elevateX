@@ -3,7 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>D2 Threat Intelligence Command Center</title>
+    <title>ElevateX Defence System · D2 Threat Intelligence</title>
+    <link rel="icon" type="image/svg+xml" href="/elevatex-mark.svg" />
+    <meta name="theme-color" content="#080b11" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#eceff5" media="(prefers-color-scheme: light)" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      /*
+        Applies the saved appearance BEFORE first paint, so the console never
+        flashes the wrong theme on load. Mirrors resolveTheme() in
+        src/services/theme.ts — keep the storage key and the values in step.
+      */
+      (function () {
+        var theme = 'dark';
+        try {
+          var stored = window.localStorage.getItem('d2.theme');
+          if (stored === 'light' || stored === 'dark') {
+            theme = stored;
+          } else if (
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: light)').matches
+          ) {
+            theme = 'light';
+          }
+        } catch (error) {
+          /* storage or matchMedia unavailable — fall back to the dark console */
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

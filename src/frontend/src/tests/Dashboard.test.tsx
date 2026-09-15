@@ -69,7 +69,8 @@ describe('Dashboard — the four required states', () => {
     resolveAll();
     renderDashboard();
 
-    expect(await screen.findByText('248')).toBeInTheDocument(); // alerts ingested
+    // The alert volume is stated exactly once, in the posture band.
+    expect(await screen.findByText('248')).toBeInTheDocument();
     expect(screen.getByText('Alerts ingested')).toBeInTheDocument();
     expect(screen.getByText('Correlated incidents')).toBeInTheDocument();
     expect(screen.getByText('Critical incidents')).toBeInTheDocument();
@@ -80,7 +81,7 @@ describe('Dashboard — the four required states', () => {
     expect(screen.getByLabelText('Alert count by source feed')).toBeInTheDocument();
 
     // The highest-priority incident is featured and links to its investigation.
-    expect(screen.getByRole('heading', { name: 'Highest-priority incident' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Priority threat' })).toBeInTheDocument();
     const cta = screen.getByRole('link', { name: /Investigate INC-001/ });
     expect(cta).toHaveAttribute('href', '/incidents/INC-001');
   });
