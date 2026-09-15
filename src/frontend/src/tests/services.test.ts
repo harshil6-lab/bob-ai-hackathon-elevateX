@@ -237,7 +237,7 @@ describe('dashboardService', () => {
 
 describe('analyzeService — the no-fake-success guarantee', () => {
   it('POSTs to /api/analyze and reports a genuine success', async () => {
-    fetchMock.mockResolvedValue(jsonResponse({ incidents_created: 9, alerts_processed: 248 }));
+    fetchMock.mockResolvedValue(jsonResponse({ incidents: [], count: 9 }));
 
     const outcome = await triggerAnalysis();
 

@@ -1,0 +1,98 @@
+[
+  {
+    "event_id": "EPS-6001",
+    "observed_at": "2026-09-14T08:05:00Z",
+    "host": "WORKSTATION-04",
+    "user": "jpatel",
+    "category": "software_update",
+    "severity": "informational",
+    "process_name": "update-agent.exe",
+    "command_line": "update-agent.exe --install",
+    "parent_process": "services.exe",
+    "description": "Approved endpoint agent update completed"
+  },
+  {
+    "event_id": "EPS-6002",
+    "observed_at": "2026-09-14T09:05:00Z",
+    "host": "WORKSTATION-04",
+    "user": "svc_monitor",
+    "category": "monitoring_health_check",
+    "severity": "low",
+    "process_name": "monitor-agent.exe",
+    "command_line": "monitor-agent.exe --health-check",
+    "parent_process": "services.exe",
+    "description": "Routine monitoring health check completed by the endpoint agent"
+  },
+  {
+    "event_id": "EPS-6003",
+    "observed_at": "2026-09-14T09:20:00Z",
+    "host": "WORKSTATION-04",
+    "user": "svc_monitor",
+    "category": "monitoring_health_check",
+    "severity": "low",
+    "process_name": "monitor-agent.exe",
+    "command_line": "monitor-agent.exe --health-check",
+    "parent_process": "services.exe",
+    "description": "Routine monitoring health check reported no anomalies"
+  },
+  {
+    "event_id": "EPS-6004",
+    "observed_at": "2026-09-14T09:29:00Z",
+    "host": "LAPTOP-22",
+    "user": "msharma",
+    "category": "usb_activity",
+    "severity": "low",
+    "process_name": "explorer.exe",
+    "command_line": "explorer.exe",
+    "parent_process": "userinit.exe",
+    "description": "Approved USB storage device mounted"
+  },
+  {
+    "event_id": "EPS-6005",
+    "observed_at": "2026-09-14T10:32:00Z",
+    "host": "SERVER-17",
+    "user": "admin",
+    "category": "PowerShell",
+    "severity": "high",
+    "process_name": "powershell.exe",
+    "command_line": "powershell.exe -nop -w hidden -enc SQBFAFgA",
+    "parent_process": "explorer.exe",
+    "description": "Suspicious process spawned from PowerShell with an encoded command"
+  },
+  {
+    "event_id": "EPS-6006",
+    "observed_at": "2026-09-14T10:40:00Z",
+    "host": "SERVER-17",
+    "user": "admin",
+    "category": "CredentialAccess",
+    "severity": "critical",
+    "process_name": "rundll32.exe",
+    "command_line": "rundll32.exe C:\\Windows\\Temp\\stage2.dll,DumpCreds",
+    "parent_process": "powershell.exe",
+    "description": "Credential dumping: LSASS process memory read by rundll32.exe"
+  },
+  {
+    "event_id": "EPS-6007",
+    "observed_at": "2026-09-14T10:52:00Z",
+    "host": "SERVER-17",
+    "user": "admin",
+    "category": "LateralMovement",
+    "severity": "critical",
+    "process_name": "net.exe",
+    "command_line": "net.exe use \\\\SERVER-12\\IPC$ /user:admin",
+    "parent_process": "cmd.exe",
+    "description": "Lateral movement: administrative share accessed on SERVER-12"
+  },
+  {
+    "event_id": "EPS-6008",
+    "observed_at": "2026-09-14T11:05:00Z",
+    "host": "WORKSTATION-30",
+    "user": "lnguyen",
+    "category": "software_update",
+    "severity": "informational",
+    "process_name": "update-agent.exe",
+    "command_line": "update-agent.exe --install",
+    "parent_process": "services.exe",
+    "description": "Approved endpoint agent update completed"
+  }
+]

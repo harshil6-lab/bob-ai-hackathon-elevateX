@@ -9,7 +9,7 @@
  * styling, no past-tense labelling. These are proposals for an analyst to act
  * on, and the wording says so explicitly.
  *
- * Handles both sides of the provisional element union (bare string / object).
+ * Handles both sides of the compatibility element union (bare string / object).
  */
 
 import { EmptyState } from './EmptyState';

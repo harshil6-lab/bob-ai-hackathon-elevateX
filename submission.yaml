@@ -33,12 +33,14 @@ submission:
     concise and prioritised threat assessments in BLUF format.
 
   solution_summary: >                  # REQUIRED — 1-3 sentences. What did you build?
-    We are building an AI-powered threat intelligence assistant that ingests
-    and normalizes multi-source threat alerts, correlates related events into
-    incidents, prioritises threats using explainable scoring, maps attacker
-    behaviour to MITRE ATT&CK, and generates evidence-grounded BLUF summaries
-    with recommended actions. IBM Bob is integrated into the solution workflow
-    to support AI-assisted threat investigation and decision support.
+    We built an AI-powered threat intelligence command center that ingests and
+    normalises multi-source threat alerts, correlates related events into
+    prioritised incidents, maps attacker behaviour to MITRE ATT&CK, and
+    generates evidence-grounded BLUF summaries with recommended actions.
+    An AI provider layer (Groq for cloud inference; IBM Granite via Ollama for
+    local IBM model inference) generates analyst-oriented BLUF explanations
+    grounded in and validated against deterministic intelligence results.
+    IBM Bob assisted throughout the development lifecycle.
 
   key_features:                        # REQUIRED — List 3 to 5 specific features you implemented
     - "Multi-source threat alert ingestion and normalization"
@@ -50,7 +52,7 @@ submission:
   tech_stack:
     languages: ["Python","TypeScript"]                      # REQUIRED — e.g., ["Python", "TypeScript"]
     frameworks: ["FastAPI","React","Vite"]                     # e.g., ["FastAPI", "React"]
-    ibm_technologies: ["IBM Bob","IBM watsonx.ai"]               # e.g., ["watsonx.ai", "IBM Bob", "IBM Cloud Functions"]
+    ibm_technologies: ["IBM Granite", "IBM Bob"]
     databases: ["SQLite"]                      # e.g., ["PostgreSQL", "Redis"]
     other: ["MITRE ATT&CK" , "REST API","Docker" , "GitHub Actions"]                          # e.g., ["Docker", "GitHub Actions", "Slack API"]
 
@@ -64,8 +66,11 @@ submission:
   known_limitations: >                 # Optional but recommended — be honest about gaps
     The prototype uses synthetic threat data and a focused MITRE ATT&CK
     mapping suitable for the demonstration rather than a complete production
-    threat intelligence deployment. Some integrations and operational
-    security controls are simplified for the hackathon environment.
+    threat intelligence deployment. The Groq AI provider requires a GROQ_API_KEY;
+    IBM Granite requires Ollama installed locally with a Granite model pulled.
+    The application always falls back to its deterministic BLUF when no AI
+    provider is available. Operational security controls are simplified for
+    the hackathon environment.
 
 # =============================================================================
 # ARTIFACT LOCATIONS

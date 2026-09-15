@@ -1,0 +1,7 @@
+2026-09-14T08:55:00Z | dns_query | low | src=10.10.6.12 | dst=10.10.1.53 | host=WORKSTATION-15 | user=tiyer | desc=Vendor update domain lookup
+2026-09-14T09:02:00Z | network_connection | high | src=198.51.100.77 | dst=10.10.4.31 | host=WORKSTATION-11 | user=dkapoor | desc=Inbound connection from external host 198.51.100.77
+2026-09-14T09:40:00Z | network_connection | low | src=10.10.4.19 | dst=203.0.113.10 | host=WORKSTATION-07 | user=aroy | desc=Routine software update download
+2026-09-14T09:44:00Z | dns_query | low | src=10.10.4.19 | dst=10.10.1.53 | host=WORKSTATION-07 | user=aroy | desc=Routine software update domain lookup
+2026-09-14T09:44:00Z | network_connection | informational | src=10.10.3.14 | dst=10.10.5.14 | host=SERVER-14 | user=svc_backup | desc=Backup agent heartbeat to management service
+2026-09-14T10:20:00Z | network_connection | high | src=203.0.113.55 | dst=10.10.5.17 | host=SERVER-17 | user=admin | desc=Suspicious external activity: unusual inbound connection from 203.0.113.55 to SERVER-17
+2026-09-14T10:47:00Z | remote_connection | high | src=10.10.5.17 | dst=10.10.5.12 | host=SERVER-17 | user=admin | desc=Outbound RDP session from SERVER-17 to SERVER-12

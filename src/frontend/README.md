@@ -63,9 +63,9 @@ checked *before* any request is attempted.
 - A demo-mode analysis run is explicitly labelled *"simulated — demo mode, no
   backend contacted"* in the UI.
 
-**It defaults to ON when `VITE_DEMO_MODE` is unset**, because `src/backend/`
-does not exist yet and Vite does not read `.env.example`. Set
-`VITE_DEMO_MODE=false` in `.env` as soon as the backend is running.
+**It defaults to ON when `VITE_DEMO_MODE` is unset**, because Vite does not read
+`.env.example`. Copy the example file and set `VITE_DEMO_MODE=false` to use the
+integrated backend.
 
 Note the distinction that keeps this honest: demo mode is decided at **startup,
 from configuration**. It is never decided by a request failing.
@@ -163,78 +163,81 @@ The suite produces no console warnings.
 
 ---
 
-## ⚠️ API contract issues for Member 1 / Member 2
+## Confirmed API integration
 
-`src/backend/` did not exist when this frontend was written, so **nothing below
-has been verified against a running API.** The canonical `Alert` and `Incident`
-field names come from `AGENTS.md`, which is authoritative; these five items are
-the gaps `AGENTS.md` does not settle.
+The backend is now integrated and verified against the frontend services.
 
-### 1. `GET /api/dashboard/stats` — response shape is PROVISIONAL
-`AGENTS.md` freezes the endpoint but not its body. Every field in
-`types/dashboard.ts` is marked `PROVISIONAL` and optional, derived from the
-dashboard requirements:
+### `GET /api/dashboard/stats`
 
+The backend returns:
+
+```json
+{
+  "total_alerts": 27,
+  "total_incidents": 17,
+  "critical_incidents": 1,
+  "high_incidents": 1,
+  "severity_distribution": {
+    "informational": 7,
+    "low": 10,
+    "medium": 1,
+    "high": 7,
+    "critical": 2
+  },
+  "source_counts": {
+    "ENDPOINT_SENSOR": 8,
+    "INTEL_REPORT": 3,
+    "NETWORK_SENSOR": 7,
+    "SIEM": 5,
+    "THREAT_INTEL": 4
+  },
+  "status_distribution": {
+    "investigating": 17
+  }
+}
 ```
-total_alerts, total_incidents, critical_count, high_count,
-severity_distribution, source_distribution, top_incident,
-recent_incidents, last_analysis_at
+
+`dashboardService.getDashboardStats()` maps `critical_incidents`, `high_incidents`, and `source_counts` into the existing dashboard view fields.
+
+### `POST /api/analyze`
+
+The backend returns:
+
+```json
+{
+  "incidents": [],
+  "count": 17
+}
 ```
 
-**Mitigation already in place:** `mergeWithDerived()` computes any field the
-backend omits from the *confirmed* `/api/alerts` and `/api/incidents` responses,
-so a partial match degrades gracefully instead of rendering blank panels. A
-field the backend *does* return always wins. This runs only on a **successful**
-stats response — never as an error fallback.
+`analyzeService.triggerAnalysis()` maps `count` into `incidents_created` for the existing UI status message.
 
-**Needed from Member 2:** confirm or correct these names.
+### Incident fields
 
-### 2. `POST /api/analyze` — response shape is PROVISIONAL
-`AnalyzeResult` fields (`incidents_created`, `alerts_processed`, `status`,
-`message`, `duration_ms`) are all optional. Any **2xx is treated as success
-regardless of body shape**, so an unexpected body cannot cause a false failure.
-Conversely any non-2xx, timeout or network error is *always* surfaced as a
-failure. Also unconfirmed: whether the endpoint is synchronous or returns a job
-handle to poll.
+The frozen public Incident schema is confirmed:
 
-### 3. `incident.evidence[]` — element shape unconfirmed
-`AGENTS.md` shows `[]`. The renderer handles **both** a bare string and an
-object with optional `source`, `timestamp`, `alert_id` / `related_alert`,
-`host`, `ip` / `source_ip` / `destination_ip`, `user`, `event_type`,
-`description`. Only fields actually present are rendered — absent fields are
-omitted entirely, never filled with a placeholder.
+- `id`
+- `severity`
+- `confidence` — integer from 0 to 100
+- `status`
+- `affected_assets` — list of strings
+- `alert_count`
+- `sources` — list of strings
+- `mitre_techniques` — list of technique ID strings
+- `evidence` — list of evidence ID strings
+- `bluf`
+- `recommended_actions` — list of strings
 
-### 4. `incident.mitre_techniques[]` — element shape unconfirmed
-Handles both a bare ID string and `{ id | technique_id, name?, tactic? }`.
-**The frontend holds no ID-to-name lookup table and will never invent one.** If
-the backend returns bare IDs, bare IDs are what is displayed. If technique names
-are wanted in the UI, the backend must supply them — flagging this as a
-coordination item rather than hard-coding a mapping.
+### Filtering
 
-### 5. `incident.confidence` — scale confirmed only by example
-`AGENTS.md` shows `"confidence": 94`, read as an integer 0–100.
-`confidencePercent()` also tolerates a 0–1 float, so `0.94` renders as 94%
-rather than 1%. Worth an explicit confirmation.
-
-**Also unconfirmed:** whether `GET /api/alerts` and `GET /api/incidents` support
-query-parameter filtering. The Alert Explorer therefore **filters client-side**
-over the full result set and does not depend on any parameter being honoured.
-`AlertQueryParams` / `IncidentQueryParams` are still sent so server-side
-filtering can be adopted later without touching call sites.
-
-> If any of the above turns out to differ, the fix is localised: the element
-> unions and accessor helpers at the bottom of `types/incident.ts` are the only
-> place that needs to change.
+`GET /api/alerts` and `GET /api/incidents` currently return the full result set. The Alert Explorer filters client-side for the demo dataset.
 
 ---
 
 ## Known limitations
 
-- **Not yet integrated with a real backend.** Every claim above about the API is
-  a claim about the frontend's *handling* of it, verified against mocked and
-  fixture data only. Phase 13 of the execution guide (real-backend verification)
-  cannot be completed until `src/backend/` exists.
-- **`DashboardStats` and `AnalyzeResult` are provisional** — see above.
+- **Real-backend integration is complete**, but the UI still supports a clearly-labelled demo mode for offline presentations.
+- **Dashboard and analyze response shapes are confirmed** and mapped in the service layer.
 - **Alert filtering and pagination are client-side.** Fine for the demo's
   ~250 alerts; a production volume would need server-side paging.
 - **Not visually regression-tested.** Responsive behaviour was built to the

@@ -1,8 +1,8 @@
 /**
  * ANALYZE SERVICE — POST /api/analyze
  *
- * Endpoint path is frozen by AGENTS.md. Response shape is PROVISIONAL
- * (see types/dashboard.ts).
+ * Endpoint path is frozen by AGENTS.md. The backend returns
+ * `{ incidents, count }`; this service maps it to the frontend view model.
  *
  * ---------------------------------------------------------------------------
  * THE ONE RULE THIS FILE EXISTS TO ENFORCE
@@ -60,11 +60,17 @@ export async function triggerAnalysis(): Promise<AnalyzeOutcome> {
   }
 
   try {
-    const result = await apiClient.post<AnalyzeResult>('/api/analyze', undefined, {
+    const result = await apiClient.post<{ incidents: unknown[]; count: number }>('/api/analyze', undefined, {
       timeoutMs: ANALYZE_TIMEOUT_MS,
     });
-    // A 2xx with an unexpected (or empty) body is still a real success.
-    return { status: 'success', simulated: false, result: result ?? {} };
+    return {
+      status: 'success',
+      simulated: false,
+      result: {
+        incidents_created: result?.count ?? result?.incidents?.length ?? 0,
+        status: 'completed',
+      },
+    };
   } catch (error) {
     return {
       status: 'failure',

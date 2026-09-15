@@ -9,7 +9,7 @@
  * that supports it. A field the API did not return is simply absent; no
  * placeholder, no "N/A", nothing invented to fill the gap.
  *
- * Handles both sides of the provisional element union (bare string / object).
+ * Handles both sides of the compatibility element union (bare string / object).
  */
 
 import { EmptyState } from './EmptyState';

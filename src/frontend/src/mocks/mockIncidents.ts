@@ -424,7 +424,7 @@ export const mockIncidents: Incident[] = [
   {
     // Deliberately uses the BARE-STRING element form for mitre_techniques,
     // evidence and recommended_actions, to prove the renderers handle both
-    // sides of the provisional union. See types/incident.ts.
+    // sides of the compatibility union. See types/incident.ts.
     id: 'INC-009',
     severity: 'low',
     confidence: 34,

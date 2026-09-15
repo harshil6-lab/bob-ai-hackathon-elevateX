@@ -1,8 +1,8 @@
 /**
  * DASHBOARD SERVICE — GET /api/dashboard/stats
  *
- * Endpoint path is frozen by AGENTS.md. The RESPONSE SHAPE is provisional —
- * see types/dashboard.ts for the full caveat.
+ * Endpoint path is frozen by AGENTS.md. The backend response is mapped into
+ * the frontend dashboard view model below.
  */
 
 import { apiClient } from './apiClient';
@@ -23,17 +23,33 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     await demoDelay();
     return mockDashboardStats;
   }
-  return apiClient.get<DashboardStats>('/api/dashboard/stats');
+  const raw = await apiClient.get<{
+    total_alerts: number;
+    total_incidents: number;
+    critical_incidents: number;
+    high_incidents: number;
+    severity_distribution: SeverityDistribution;
+    source_counts: SourceDistribution;
+    status_distribution: Record<string, number>;
+  }>('/api/dashboard/stats');
+
+  return {
+    total_alerts: raw.total_alerts,
+    total_incidents: raw.total_incidents,
+    critical_count: raw.critical_incidents,
+    high_count: raw.high_incidents,
+    severity_distribution: raw.severity_distribution,
+    source_distribution: raw.source_counts,
+  };
 }
 
 /**
  * Computes an equivalent dashboard view from the CONFIRMED /api/alerts and
  * /api/incidents contracts.
  *
- * WHY THIS EXISTS: /api/dashboard/stats has a provisional response shape. If
- * Member 2's implementation names its fields differently, the Dashboard would
- * otherwise render empty sections. This lets the Dashboard fill a gap in a
- * PROVISIONAL field using data it already fetched from a CONFIRMED endpoint.
+ * WHY THIS EXISTS: the backend does not currently return `top_incident` or
+ * `recent_incidents`. This computes those derived fields from the confirmed
+ * `/api/alerts` and `/api/incidents` responses already used by the Dashboard.
  *
  * IMPORTANT: this is NOT an error fallback. It is only ever merged into a
  * SUCCESSFUL stats response (see `mergeWithDerived`). If /api/dashboard/stats
@@ -78,7 +94,7 @@ export function deriveDashboardStats(
 }
 
 /**
- * Fills only the PROVISIONAL fields the backend did not return. A field the
+ * Fills only the derived fields the backend did not return. A field the
  * backend DID return always wins — the frontend never overrides real data.
  */
 export function mergeWithDerived(

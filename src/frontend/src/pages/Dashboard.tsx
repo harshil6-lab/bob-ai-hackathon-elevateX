@@ -57,7 +57,7 @@ export function Dashboard() {
   const incidents = incidentsResource.data ?? [];
 
   /**
-   * Fill only the PROVISIONAL stats fields the backend omitted, using the
+   * Fill only the derived stats fields the backend omitted, using the
    * CONFIRMED /api/alerts and /api/incidents data already on screen. Applied
    * to a SUCCESSFUL stats response only — never as an error fallback.
    */

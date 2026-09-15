@@ -1,0 +1,3 @@
+REPORT DATE: 2026-09-14
+Intel report TI-2026-0914-A (synthetic demonstration data) records external IPv4 address 203.0.113.55 in repeated connection attempts against internal server infrastructure.
+Reported context: regional threat watchers observed encoded PowerShell execution on the affected server followed by credential store access and outbound administrative connections to a second internal server.

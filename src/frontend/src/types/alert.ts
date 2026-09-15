@@ -2,10 +2,7 @@
  * CANONICAL ALERT SCHEMA
  *
  * Mirrors the frozen contract in AGENTS.md ("Canonical Alert Schema") exactly.
- * Field names are CONFIRMED against AGENTS.md, which is the authoritative
- * shared contract for this repository. They are NOT yet confirmed against a
- * running backend, because src/backend/ has not been implemented at the time
- * of writing.
+ * Field names are confirmed against AGENTS.md and the integrated backend.
  *
  * Do not rename, add, or omit fields here without team approval — this type is
  * one half of the frontend/backend contract.
@@ -34,11 +31,9 @@ export interface Alert {
 /**
  * Query parameters for GET /api/alerts.
  *
- * PROVISIONAL: the backend does not exist yet, so it is unknown which (if any)
- * of these the API supports server-side. The Alert Explorer therefore filters
- * CLIENT-SIDE over the full result set and does not depend on any of these
- * being honoured. They are sent through only so that server-side filtering can
- * be adopted later without changing call sites.
+ * Optional query parameters. The current backend returns the full result set,
+ * so the Alert Explorer filters CLIENT-SIDE. These parameters are retained so
+ * server-side filtering can be adopted later without changing call sites.
  */
 export interface AlertQueryParams {
   severity?: Severity;

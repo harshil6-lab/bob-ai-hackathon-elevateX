@@ -11,10 +11,9 @@ import { isDemoMode, demoDelay } from './demoMode';
 import type { Alert, AlertQueryParams } from '../types/alert';
 
 /**
- * Tolerates either a bare array or a `{ alerts: [...] }` / `{ items: [...] }`
- * envelope, since the backend does not exist yet and FastAPI projects commonly
- * use either. This is shape tolerance on the RESPONSE ENVELOPE only — no field
- * inside an Alert is renamed or invented.
+ * Unwraps the backend's `{ alerts: [...] }` envelope. A bare array is also
+ * tolerated for compatibility with alternative API deployments. No field inside
+ * an Alert is renamed or invented.
  */
 function unwrapList(payload: unknown): Alert[] {
   if (Array.isArray(payload)) return payload as Alert[];

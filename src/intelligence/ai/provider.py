@@ -1,4 +1,4 @@
-"""Provider abstraction for future AI reasoning services."""
+"""Provider abstraction for AI reasoning services."""
 
 from __future__ import annotations
 
@@ -10,8 +10,9 @@ from .grounding import AIReasoningOutput
 
 @runtime_checkable
 class AIReasoningProvider(Protocol):
-    """Boundary that a future IBM watsonx.ai adapter can implement.
+    """Boundary that AI provider implementations must satisfy.
 
+    Current implementations: GroqProvider, GraniteProvider.
     Implementations must accept deterministic structured context and return
     structured reasoning output. They must not mutate the context or become an
     authority over correlation, scoring, evidence, or MITRE mapping.

@@ -1,121 +1,136 @@
-# 🚀 [Your Project Title Here]
+# D2 Threat Intelligence Command Center
 
-> ⚠️ **Replace everything in `[ ]` brackets with your actual content before submission.**
+## Team
 
----
+- **Team:** elevateX
+- **Track:** AI
+- **Lead:** Harshil Kalsariya
+- **Members:** Pranav Dabhi, Jenil Viradia, Shivam Prajapati
 
-## 👥 Team
+## Problem
 
-| Field | Value |
-|---|---|
-| **Team Name** | [Your Team Name] |
-| **Track** | [AI / DevOps / Sustainability / Open] |
-| **Team Lead** | [Name] — [email@ibm.com] |
-| **Members** | [Name 1], [Name 2], [Name 3] |
+Defence and security analysts receive thousands of alerts every day from SIEM systems, network sensors, endpoint agents, and intelligence reports in different formats. Manually correlating those alerts makes it difficult to separate genuine threats from noise, while commanders need concise, prioritised, and evidence-grounded assessments.
 
----
+## Solution
 
-## 🎯 Problem Statement
+The D2 Threat Intelligence Command Center ingests multi-source threat data, normalises it into a canonical Alert schema, correlates related events into Incidents, scores and prioritises them, maps attacker behaviour to MITRE ATT&CK, and produces evidence-grounded BLUF summaries with recommended actions. A React dashboard presents the alerts, incidents, evidence, MITRE mappings, and recommended actions.
 
-> In 2–3 sentences: What problem does your project solve? Who experiences this problem?
+## Key Features
 
-[Describe the real-world problem your project addresses. Be specific about who the user is and what pain point they face.]
+- Multi-source threat alert ingestion and normalisation
+- Deterministic correlation of related alerts into incidents
+- Threat prioritisation with severity and confidence scoring
+- MITRE ATT&CK technique mapping with evidence references
+- Evidence-grounded BLUF summaries and recommended actions
 
----
-
-## 💡 Solution
-
-> In 2–3 sentences: What did you build? How does it solve the problem above?
-
-[Describe your solution clearly. Explain the core mechanism — what makes it work.]
-
----
-
-## ✨ Key Features
-
-- **Feature 1:** [Brief description — e.g., "Real-time anomaly detection using watsonx.ai"]
-- **Feature 2:** [Brief description]
-- **Feature 3:** [Brief description]
-- **Feature 4:** [Optional]
-- **Feature 5:** [Optional]
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Category | Technologies |
 |---|---|
-| **Languages** | [e.g., Python, TypeScript] |
-| **Frameworks** | [e.g., FastAPI, React] |
-| **IBM Technologies** | [e.g., watsonx.ai, IBM Bob, IBM Cloud] |
-| **Databases** | [e.g., PostgreSQL, Redis] |
-| **Other** | [e.g., Docker, GitHub Actions] |
+| Languages | Python, TypeScript |
+| Backend | FastAPI, SQLAlchemy, SQLite |
+| Intelligence | Deterministic Python pipeline with Groq (cloud) and IBM Granite (local Ollama) AI providers |
+| Frontend | React, Vite, TypeScript |
+| Tooling | Docker, Docker Compose, GitHub Actions |
 
----
+## Repository Structure
 
-## 📁 Repository Structure
-
-```
-├── src/                  # All source code
-├── docs/                 # Written documentation
-│   ├── problem-statement.md
-│   ├── solution-overview.md
-│   ├── architecture.md
-│   └── setup-guide.md
-├── demo/                 # Demo artifacts
-│   ├── screenshots/      # App screenshots
-│   └── demo-video-link.txt  # Link to demo video
-├── presentation/         # Slide deck
-└── submission.yaml       # Structured submission metadata
+```text
+src/
+  backend/       FastAPI backend, SQLite storage, repositories, API routes
+  intelligence/  Deterministic correlation, scoring, evidence, MITRE, BLUF
+  frontend/      React dashboard and investigation UI
+  data/          Synthetic multi-source threat feeds
+docs/            Architecture, setup, and solution documentation
+demo/            Demo artifacts
+presentation/    Slide deck
 ```
 
----
+## Quick Start
 
-## ⚡ How to Run
+### Prerequisites
 
-> **Copy these exact steps from your [`docs/setup-guide.md`](docs/setup-guide.md)**
+- Python 3.11+
+- Node.js 20+
+- Docker Desktop (optional, for containerised execution)
+
+### Local Development
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/[your-repo].git
-cd [your-repo]
+# Backend
+cd src/backend
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m app.db.seed --reset
+.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
-# 2. Install dependencies
-[your install command here]
-
-# 3. Configure environment
-cp .env.example .env
-# Edit .env with your values
-
-# 4. Run the project
-[your run command here]
+# Frontend (separate terminal)
+cd src/frontend
+npm install
+npm run dev
 ```
 
----
+The frontend runs at `http://localhost:5173`; the backend API runs at `http://localhost:8000`.
 
-## 🖥️ Demo
+### Docker
 
-| Artifact | Link |
-|---|---|
-| 📹 Demo Video | [See demo/demo-video-link.txt](demo/demo-video-link.txt) |
-| 🌐 Live Demo | [See demo/live-demo-url.txt](demo/live-demo-url.txt) |
-| 🖼️ Screenshots | [See demo/screenshots/](demo/screenshots/) |
-| 📊 Presentation | [See presentation/slides.pdf](presentation/) |
+```bash
+docker compose up --build
+```
 
----
+- Backend: `http://localhost:8000`
+- Frontend: `http://localhost:5173`
 
-## ⚠️ Known Limitations
+The backend uses SQLite at `/app/data/elevatex.db` inside the container and mounts the repository’s `./data` directory for persistence.
 
-> Be honest — judges appreciate transparency over overclaiming.
+## Tests
 
-- [Limitation 1: e.g., "Authentication is mocked — not production-ready"]
-- [Limitation 2: e.g., "Only tested on Chrome"]
-- [Limitation 3: e.g., "Feature X is scaffolded but not fully implemented"]
+```bash
+# Intelligence (264 tests) — run from workspace root
+python -m pytest src/intelligence/tests/ -q
 
----
+# Backend (50 tests)
+cd src/backend
+.venv\Scripts\python.exe -m pytest
 
-## 🏅 What We're Most Proud Of
+# Frontend (136 tests)
+cd src/frontend
+npx vitest run
+```
 
-[Tell the judges what part of your submission is strongest and worth paying close attention to.]
+Total: **450 tests, 0 failures** expected.
 
----
+See [`docs/end-to-end-operations-guide.md`](docs/end-to-end-operations-guide.md) for the complete operations reference.
+
+## API
+
+The frozen API surface is:
+
+- `GET /api/alerts`
+- `GET /api/alerts/{id}`
+- `GET /api/incidents`
+- `GET /api/incidents/{id}`
+- `GET /api/dashboard/stats`
+- `POST /api/analyze`
+
+Example request and response payloads are documented in [`src/backend/docs/example_payloads.md`](src/backend/docs/example_payloads.md).
+
+## IBM Technologies
+
+- **IBM Granite**: IBM's open-source foundation model, available as an optional local AI provider via Ollama (`AI_PROVIDER=granite`). No IBM cloud credentials required. IBM Granite models run on the operator's own hardware through Ollama's OpenAI-compatible API.
+- **IBM Bob**: Used throughout the development lifecycle — architecture design, intelligence engine review, AI provider implementation (Groq + IBM Granite), grounded prompt engineering, test suite authorship, documentation, and security review. See [`docs/ibm-bob-contribution.md`](docs/ibm-bob-contribution.md).
+
+## AI Providers
+
+- **Groq** (`AI_PROVIDER=groq`): Cloud inference via Groq API. Requires `GROQ_API_KEY`. Default model: `llama-3.1-8b-instant`.
+- **IBM Granite via Ollama** (`AI_PROVIDER=granite`): Local inference using IBM open-source Granite models through Ollama. Requires `GRANITE_ENABLED=true` and Ollama running locally with a Granite model pulled.
+- **Deterministic** (default): No external AI call; uses the deterministic BLUF from the intelligence engine.
+
+All providers are subject to the same grounding validator — neither can invent security facts.
+
+## Known Limitations
+
+- The demo uses synthetic threat data.
+- MITRE ATT&CK coverage is focused on the demonstrated attack chain rather than the full framework.
+- The Groq AI provider requires a `GROQ_API_KEY`; IBM Granite requires Ollama running locally. The deterministic BLUF is always the fallback.
+- Operational security controls are simplified for the hackathon environment.

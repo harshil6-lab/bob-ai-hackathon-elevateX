@@ -1,4 +1,4 @@
-https://youtu.be/your-demo-video-link-here
+NOT RECORDED — run locally using docs/setup-guide.md
 
 Replace the URL above with a link to your demo video.
 

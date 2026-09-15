@@ -1,0 +1,39 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: src/backend/Dockerfile
+    environment:
+      DATABASE_URL: sqlite:////app/data/elevatex.db
+      CORS_ORIGINS: http://localhost:5173
+      INTELLIGENCE_MODE: real
+      # ── AI provider ──────────────────────────────────────────────────────────
+      # Supported values: groq | granite | deterministic (default)
+      # Supply real credentials at runtime via host environment variables.
+      # NEVER commit real API keys to this file.
+      AI_PROVIDER: ${AI_PROVIDER:-deterministic}
+      # Groq cloud inference (required when AI_PROVIDER=groq)
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL_ID: ${GROQ_MODEL_ID:-llama-3.1-8b-instant}
+      # IBM Granite via Ollama (required when AI_PROVIDER=granite)
+      # NOTE: localhost inside Docker refers to the container, not the host.
+      # Set GRANITE_BASE_URL to the host machine IP when running Ollama on the host.
+      # e.g. GRANITE_BASE_URL=http://host.docker.internal:11434/v1  (Docker Desktop)
+      GRANITE_ENABLED: ${GRANITE_ENABLED:-false}
+      GRANITE_BASE_URL: ${GRANITE_BASE_URL:-http://localhost:11434/v1}
+      GRANITE_MODEL_ID: ${GRANITE_MODEL_ID:-granite3-moe:3b}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+
+  frontend:
+    build:
+      context: .
+      dockerfile: src/frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend

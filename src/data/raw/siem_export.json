@@ -1,0 +1,62 @@
+[
+  {
+    "event_id": "SIEM-7001",
+    "detected_at": "2026-09-14T08:12:00Z",
+    "sensor": "identity-provider",
+    "category": "authentication_failure",
+    "priority": "low",
+    "src_ip": "10.10.2.41",
+    "dst_ip": "10.10.2.10",
+    "endpoint": "WORKSTATION-08",
+    "account": "akhan",
+    "summary": "Single failed login from WORKSTATION-08 after a scheduled password change"
+  },
+  {
+    "event_id": "SIEM-7002",
+    "detected_at": "2026-09-14T09:35:00Z",
+    "sensor": "patch-manager",
+    "category": "software_update",
+    "priority": "informational",
+    "src_ip": "10.10.3.8",
+    "dst_ip": "10.10.5.9",
+    "endpoint": "SERVER-09",
+    "account": "svc_patch",
+    "summary": "Approved maintenance window patch installation completed on SERVER-09"
+  },
+  {
+    "event_id": "SIEM-7003",
+    "detected_at": "2026-09-14T09:44:00Z",
+    "sensor": "identity-provider",
+    "category": "authentication_failure",
+    "priority": "medium",
+    "src_ip": "198.51.100.77",
+    "dst_ip": "10.10.4.31",
+    "endpoint": "WORKSTATION-11",
+    "account": "dkapoor",
+    "summary": "Repeated authentication attempts against WORKSTATION-11 from external host 198.51.100.77"
+  },
+  {
+    "event_id": "SIEM-7004",
+    "detected_at": "2026-09-14T10:05:00Z",
+    "sensor": "endpoint-policy",
+    "category": "policy_violation",
+    "priority": "low",
+    "src_ip": "10.10.6.5",
+    "dst_ip": "10.10.6.1",
+    "endpoint": "WORKSTATION-23",
+    "account": "bgarcia",
+    "summary": "Unapproved application blocked by endpoint policy on WORKSTATION-23"
+  },
+  {
+    "event_id": "SIEM-7005",
+    "detected_at": "2026-09-14T08:47:00Z",
+    "sensor": "proxy",
+    "category": "network_connection",
+    "priority": "low",
+    "src_ip": "10.10.6.12",
+    "dst_ip": "203.0.113.10",
+    "endpoint": "WORKSTATION-15",
+    "account": "tiyer",
+    "summary": "Vendor software update download completed from WORKSTATION-15"
+  }
+]

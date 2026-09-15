@@ -1,0 +1,42 @@
+{
+  "feed_name": "regional-threat-watch",
+  "generated_at": "2026-09-14T10:30:00Z",
+  "indicators": [
+    {
+      "type": "ipv4",
+      "value": "203.0.113.55",
+      "confidence": 92,
+      "severity": "high",
+      "tags": ["initial-access", "brute-force", "known-malicious"],
+      "first_seen": "2026-09-12T14:00:00Z",
+      "last_seen": "2026-09-14T10:18:00Z"
+    },
+    {
+      "type": "sha256",
+      "value": "8f2b7c93a5d64e0f1a6b9c8d7e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f",
+      "confidence": 87,
+      "severity": "high",
+      "tags": ["script", "encoded-command", "tooling"],
+      "first_seen": "2026-09-13T11:00:00Z",
+      "last_seen": "2026-09-14T10:30:00Z"
+    },
+    {
+      "type": "ipv4",
+      "value": "198.51.100.77",
+      "confidence": 88,
+      "severity": "high",
+      "tags": ["brute-force", "initial-access", "known-malicious"],
+      "first_seen": "2026-09-13T09:00:00Z",
+      "last_seen": "2026-09-14T09:36:00Z"
+    },
+    {
+      "type": "domain",
+      "value": "cdn-metrics.example.com",
+      "confidence": 18,
+      "severity": "low",
+      "tags": ["benign", "software-update"],
+      "first_seen": "2026-09-01T00:00:00Z",
+      "last_seen": "2026-09-14T07:30:00Z"
+    }
+  ]
+}

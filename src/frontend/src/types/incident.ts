@@ -5,28 +5,24 @@
  * exactly. The eleven top-level field names are CONFIRMED against AGENTS.md.
  *
  * ---------------------------------------------------------------------------
- * PROVISIONAL ELEMENT SHAPES — raised with Member 1 / Member 2
+ * CONFIRMED ELEMENT SHAPES
  * ---------------------------------------------------------------------------
- * AGENTS.md specifies `mitre_techniques`, `evidence` and `recommended_actions`
- * as empty arrays (`[]`), so the ELEMENT shape inside each array is not yet
- * pinned down by the contract, and no backend exists to read it from.
+ * The integrated backend returns `mitre_techniques`, `evidence`, and
+ * `recommended_actions` as lists of strings.
  *
- * Rather than guess one shape and ship a renderer that breaks on the other,
- * each element type below is a UNION of the two plausible shapes (bare string
- * vs. structured object). Every field on the object variants is OPTIONAL, and
- * the UI renders ONLY the fields actually present in the response — it never
- * fabricates a value to fill a gap.
+ * The object variants below remain as a compatibility shim for demo fixtures
+ * and future contract extensions. The UI renders only fields actually present
+ * and never fabricates a value to fill a gap.
  *
- * These unions are a compatibility shim, NOT an invented contract. Once the
- * real shape is confirmed, narrow these types — the accessor helpers at the
- * bottom of this file are the only place that needs to change.
+ * Accessor helpers at the bottom of this file absorb any future element-shape
+ * differences without spreading contract handling across components.
  */
 
 import type { Severity } from './alert';
 
 /* ── MITRE ATT&CK ────────────────────────────────────────────────────────── */
 
-/** PROVISIONAL object form. Only `id` is treated as guaranteed. */
+/** Compatibility object form. Only `id` is treated as guaranteed. */
 export interface MitreTechniqueObject {
   id?: string;
   technique_id?: string;
@@ -40,7 +36,7 @@ export type MitreTechnique = string | MitreTechniqueObject;
 /* ── Evidence ────────────────────────────────────────────────────────────── */
 
 /**
- * PROVISIONAL object form. Every field is optional and rendered only when
+ * Compatibility object form. Every field is optional and rendered only when
  * present, per the "never fabricate evidence" rule.
  */
 export interface EvidenceObject {
@@ -62,7 +58,7 @@ export type EvidenceItem = string | EvidenceObject;
 /* ── Recommended actions ─────────────────────────────────────────────────── */
 
 /**
- * PROVISIONAL object form.
+ * Compatibility object form.
  *
  * NOTE: there is deliberately no `completed` / `executed` field here. The UI
  * labels these strictly as "Recommended actions" and must never imply an
@@ -101,7 +97,7 @@ export interface Incident {
 
 /**
  * Query parameters for GET /api/incidents.
- * PROVISIONAL — see the equivalent note on AlertQueryParams.
+ * Optional query parameters; filtering is currently client-side.
  */
 export interface IncidentQueryParams {
   severity?: Severity;

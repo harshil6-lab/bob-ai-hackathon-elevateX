@@ -2,7 +2,7 @@
  * MOCK DATA — for local frontend development only.
  * Not used when VITE_DEMO_MODE is unset.
  *
- * Conforms to the PROVISIONAL `DashboardStats` type (see types/dashboard.ts).
+ * Conforms to the frontend `DashboardStats` view model.
  * Derived from the mock alerts and incidents rather than hand-written, so the
  * headline numbers on the Dashboard always reconcile exactly with what the
  * Alert Explorer and Incident Explorer actually list. A demo where the summary
