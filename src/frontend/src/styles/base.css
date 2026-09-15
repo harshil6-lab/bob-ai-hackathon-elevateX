@@ -1,6 +1,9 @@
 /* =============================================================================
    BASE — resets, typography scale, layout primitives, shared utilities.
    Depends on tokens.css (imported first in main.tsx).
+
+   Hierarchy on every page comes from TYPE, SPACE and ALIGNMENT first.
+   A border is only drawn where it expresses a real grouping or a real edge.
 ============================================================================= */
 
 *,
@@ -30,7 +33,12 @@ h1, h2, h3, h4, h5, h6, p, figure, dl, dd {
   margin: 0;
 }
 
-h1 { font-size: var(--text-xl); font-weight: var(--weight-semibold); line-height: var(--leading-tight); }
+h1 {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+}
 h2 { font-size: var(--text-lg); font-weight: var(--weight-semibold); line-height: var(--leading-tight); }
 h3 { font-size: var(--text-base); font-weight: var(--weight-semibold); line-height: var(--leading-snug); }
 
@@ -99,8 +107,12 @@ code, kbd, samp, pre { font-family: var(--font-mono); }
   width: 100%;
   max-width: var(--layout-max-width);
   margin: 0 auto;
-  padding: var(--space-6) var(--space-6) var(--space-12);
+  padding: var(--space-6) var(--space-8) var(--space-12);
 }
+
+/* Unrelated regions are separated by space, not by boxes. */
+.page > section { margin-bottom: var(--section-gap); }
+.page > section:last-child { margin-bottom: 0; }
 
 .page-header {
   display: flex;
@@ -108,31 +120,32 @@ code, kbd, samp, pre { font-family: var(--font-mono); }
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--space-4);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
 }
 
 .page-title-group { min-width: 0; }
 
 .page-eyebrow {
-  font-size: var(--text-xs);
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-wide);
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--color-text-muted);
-  margin-bottom: var(--space-1);
+  margin-bottom: var(--space-2);
 }
 
 .page-subtitle {
   color: var(--color-text-secondary);
   font-size: var(--text-sm);
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
+  max-width: 88ch;
 }
 
-/* ── Panel ─────────────────────────────────────────────────────────────── */
+/* ── Panel — used only where a genuine bounded region is needed ─────────── */
 .panel {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
 }
 
 .panel-header {
@@ -140,19 +153,19 @@ code, kbd, samp, pre { font-family: var(--font-mono); }
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--color-divider);
 }
 
 .panel-title {
-  font-size: var(--text-xs);
+  font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-wide);
+  letter-spacing: var(--tracking-wider);
   text-transform: uppercase;
   color: var(--color-text-secondary);
 }
 
-.panel-body { padding: var(--space-5); }
+.panel-body { padding: var(--space-4); }
 
 /* ── Buttons ───────────────────────────────────────────────────────────── */
 .btn {
@@ -162,41 +175,55 @@ code, kbd, samp, pre { font-family: var(--font-mono); }
   gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
   border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   background: var(--color-bg-elevated);
-  color: var(--color-text-primary);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
-  line-height: 1.4;
-  transition: background 120ms ease, border-color 120ms ease;
+  color: var(--color-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  min-height: 32px;
+  transition: background 100ms ease, border-color 100ms ease, color 100ms ease;
 }
-.btn:hover:not(:disabled) { background: var(--color-bg-hover); }
-.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-strong);
+}
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
+/*
+  Primary = the one obvious next step on a screen. Solid, so it cannot be
+  mistaken for the quiet secondary controls around it. There is never more
+  than one of these visible at a time.
+*/
 .btn-primary {
   background: var(--color-accent);
   border-color: var(--color-accent);
-  color: #06101f;
-  font-weight: var(--weight-semibold);
+  color: var(--color-on-accent);
+  font-weight: var(--weight-bold);
 }
 .btn-primary:hover:not(:disabled) {
   background: var(--color-accent-hover);
   border-color: var(--color-accent-hover);
+  color: var(--color-on-accent);
+  text-decoration: none;
 }
 
 .btn-lg {
-  padding: var(--space-3) var(--space-6);
-  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  min-height: 40px;
 }
 
 .btn-ghost {
   background: transparent;
   border-color: transparent;
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
 }
 .btn-ghost:hover:not(:disabled) {
   background: var(--color-bg-hover);
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
 }
 
 /* ── Form controls ─────────────────────────────────────────────────────── */
@@ -241,6 +268,8 @@ code, kbd, samp, pre { font-family: var(--font-mono); }
   white-space: nowrap;
 }
 
+/* The one small-uppercase style in the system. Used for metadata LABELS
+   only — never for a value the user has to read. */
 .metric-label {
   font-size: var(--text-2xs);
   font-weight: var(--weight-semibold);
@@ -252,18 +281,8 @@ code, kbd, samp, pre { font-family: var(--font-mono); }
 /* ── Grid helpers ──────────────────────────────────────────────────────── */
 .grid { display: grid; gap: var(--space-4); }
 
-.stat-grid {
-  display: grid;
-  gap: var(--space-4);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-@media (max-width: 1100px) {
-  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 @media (max-width: 720px) {
-  .stat-grid { grid-template-columns: minmax(0, 1fr); }
-  .page { padding: var(--space-4) var(--space-4) var(--space-10); }
+  .page { padding: var(--space-5) var(--space-4) var(--space-10); }
 }
 
 @media (prefers-reduced-motion: reduce) {

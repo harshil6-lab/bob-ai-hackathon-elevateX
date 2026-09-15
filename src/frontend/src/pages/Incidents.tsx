@@ -192,10 +192,12 @@ function IncidentCard({
         </div>
       ) : null}
 
-      <Link
-        className={`btn ${emphasis ? 'btn-primary' : ''} incident-card__cta`}
-        to={`/incidents/${incident.id}`}
-      >
+      {/*
+        A list of equals: every card gets the same quiet control. The solid
+        primary treatment is reserved for the single next step on a screen,
+        which on this page is whichever incident the analyst chooses.
+      */}
+      <Link className="btn incident-card__cta" to={`/incidents/${incident.id}`}>
         Investigate <span className="sr-only">incident {incident.id}</span> →
       </Link>
     </article>

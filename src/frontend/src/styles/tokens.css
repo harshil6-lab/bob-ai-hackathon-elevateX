@@ -2,8 +2,18 @@
    THREAT INTELLIGENCE COMMAND CENTER — DESIGN TOKENS
    Team elevateX · IBM BOBATHON 2026 · Problem D2
    -----------------------------------------------------------------------------
-   Visual language: dark, dense, professional security-operations console.
-   Deliberately NOT used: neon glow, heavy gradients, decorative chrome.
+   Visual language: quiet, professional defence console — dark by default, with
+   a full light theme for bright rooms and projectors. The interface is
+   deliberately almost monochrome so that the ONE thing that is coloured —
+   severity — is the thing the eye lands on first.
+
+   THEMING CONTRACT
+   Every colour in the product is a token below. The theme is selected by
+   <html data-theme="dark|light">, written before first paint by the inline
+   script in index.html and kept in step by hooks/useTheme.ts. A component
+   never branches on the theme, and no colour is hardcoded outside this file.
+
+   Deliberately NOT used: neon, glow, gradients, scanlines, decorative chrome.
 
    TWO SEPARATE ENCODINGS — these must never be visually confused:
      SEVERITY   = "how bad is this?"        -> warm hue ramp + SHAPE glyph + label
@@ -13,73 +23,88 @@
 ============================================================================= */
 
 :root {
-  /* ── Background layers ────────────────────────────────────────────────── */
-  --color-bg-base: #0a0e13;          /* app canvas / deepest layer          */
-  --color-bg-surface: #111820;       /* cards, panels, table bodies         */
-  --color-bg-elevated: #19222d;      /* popovers, hovered rows, raised rows */
-  --color-bg-inset: #070a0e;         /* wells, code blocks, inset regions   */
-  --color-bg-hover: #1e2935;         /* interactive hover wash              */
+  /* Native form controls, scrollbars and caret follow the theme. */
+  color-scheme: dark;
 
-  /* ── Text ─────────────────────────────────────────────────────────────── */
-  --color-text-primary: #e8eff6;
-  --color-text-secondary: #9db0c3;
-  --color-text-muted: #667c90;
-  --color-text-inverse: #0a0e13;
+  /* ── Background layers — near-black, deep navy cast ───────────────────── */
+  --color-bg-base: #080b11;          /* app canvas / deepest layer          */
+  --color-bg-surface: #0d121b;       /* panels, table bodies                */
+  --color-bg-elevated: #131a25;      /* hovered rows, raised surfaces       */
+  --color-bg-inset: #070a0f;         /* wells, code blocks, inset regions   */
+  --color-bg-hover: #18202c;         /* interactive hover wash              */
+  --color-bg-panel-header: #101722;  /* panel header row (slightly offset)  */
+  --color-bg-command: #070a10;       /* nav / command band                  */
 
-  /* ── Structure ────────────────────────────────────────────────────────── */
-  --color-border: #243141;
-  --color-border-strong: #33455a;
-  --color-divider: #1a2430;
+  /* ── Text — blue-grey ramp, strong contrast at every step ────────────── */
+  --color-text-primary: #e2e9f1;     /* main readable text                  */
+  --color-text-secondary: #97a9bd;   /* secondary copy, body paragraphs     */
+  --color-text-muted: #75899d;       /* labels, captions, metadata (AA)     */
+  --color-text-inverse: #080b11;
 
-  /* ── SEVERITY ramp — warm hue progression, always paired with a glyph ─── */
-  --color-critical: #ff5c5c;
-  --color-critical-bg: rgba(255, 92, 92, 0.12);
-  --color-critical-border: rgba(255, 92, 92, 0.42);
+  /* ── Structure — square, thin, sparingly used ────────────────────────── */
+  --color-border: #1b2433;
+  --color-border-strong: #26364a;
+  --color-divider: #141c27;
+  --color-grid-line: rgba(27, 36, 51, 0.6);
 
-  --color-high: #ff8f3f;
-  --color-high-bg: rgba(255, 143, 63, 0.12);
-  --color-high-border: rgba(255, 143, 63, 0.42);
+  /* ── SEVERITY ramp — the only saturated colour in the product ────────── */
+  --color-critical: #f25555;
+  --color-critical-bg: rgba(242, 85, 85, 0.10);
+  --color-critical-border: rgba(242, 85, 85, 0.45);
 
-  --color-medium: #f2c14e;
-  --color-medium-bg: rgba(242, 193, 78, 0.12);
-  --color-medium-border: rgba(242, 193, 78, 0.40);
+  /* High: amber — urgent but not alarming */
+  --color-high: #e08a34;
+  --color-high-bg: rgba(224, 138, 52, 0.10);
+  --color-high-border: rgba(224, 138, 52, 0.42);
 
-  --color-low: #7d90a6;
-  --color-low-bg: rgba(125, 144, 166, 0.14);
-  --color-low-border: rgba(125, 144, 166, 0.42);
+  /* Medium: restrained gold */
+  --color-medium: #c9a936;
+  --color-medium-bg: rgba(201, 169, 54, 0.10);
+  --color-medium-border: rgba(201, 169, 54, 0.38);
 
-  /* Non-colour severity cue: distinct GEOMETRIC SHAPES.
-     Readable by colourblind users and in greyscale/projector conditions.   */
-  --sev-critical-glyph: "\25C6";     /* ◆ filled diamond */
-  --sev-high-glyph: "\25B2";         /* ▲ filled triangle */
-  --sev-medium-glyph: "\25A0";       /* ■ filled square */
-  --sev-low-glyph: "\25CF";          /* ● filled circle */
+  /* Low: steel blue-grey — clearly "not a threat" */
+  --color-low: #6b8192;
+  --color-low-bg: rgba(107, 129, 146, 0.12);
+  --color-low-border: rgba(107, 129, 146, 0.38);
 
-  /* ── CONFIDENCE — cool teal, deliberately outside the severity ramp ───── */
-  --color-confidence: #2ec4b6;
-  --color-confidence-bg: rgba(46, 196, 182, 0.12);
-  --color-confidence-border: rgba(46, 196, 182, 0.40);
-  --color-confidence-track: #1d2b33;
+  /* Non-colour severity cue: distinct GEOMETRIC SHAPES */
+  --sev-critical-glyph: "\25C6";
+  --sev-high-glyph: "\25B2";
+  --sev-medium-glyph: "\25A0";
+  --sev-low-glyph: "\25CF";
 
-  /* ── Accent / primary action ──────────────────────────────────────────── */
-  --color-accent: #4c8dff;
-  --color-accent-hover: #649dff;
-  --color-accent-active: #3a76e0;
-  --color-accent-bg: rgba(76, 141, 255, 0.12);
-  --color-accent-border: rgba(76, 141, 255, 0.45);
+  /* ── CONFIDENCE — cool slate-teal, outside the severity ramp ─────────── */
+  --color-confidence: #34a99f;
+  --color-confidence-bg: rgba(52, 169, 159, 0.10);
+  --color-confidence-border: rgba(52, 169, 159, 0.32);
+  --color-confidence-track: #16242b;
 
-  /* ── Status / process feedback (not severity, not confidence) ─────────── */
-  --color-success: #3fb950;
-  --color-success-bg: rgba(63, 185, 80, 0.12);
-  --color-danger: #ff5c5c;
-  --color-warning: #f2c14e;
-  --color-demo: #d29922;             /* demo-mode banner */
-  --color-demo-bg: rgba(210, 153, 34, 0.14);
-  --color-demo-border: rgba(210, 153, 34, 0.50);
+  /* ── Accent — interactive/system only. Never decorative. ─────────────── */
+  --color-accent: #4a8bd6;
+  --color-accent-hover: #63a0e4;
+  --color-accent-active: #3a76bb;
+  --color-accent-bg: rgba(74, 139, 214, 0.12);
+  --color-accent-border: rgba(74, 139, 214, 0.42);
+  /* Text placed ON the accent. Dark here: the accent is light enough in the
+     dark theme that near-black clears AA where white would not. */
+  --color-on-accent: #071019;
+
+  /* Supporting analytics bars: neutral steel, so charts never outrank the
+     severity ramp or the primary action. */
+  --color-source-bar: #4a5f75;
+
+  /* ── Status feedback ─────────────────────────────────────────────────── */
+  --color-success: #3fae54;
+  --color-success-bg: rgba(63, 174, 84, 0.10);
+  --color-danger: #f25555;
+  --color-warning: #c9a936;
+  --color-demo: #bd8a24;
+  --color-demo-bg: rgba(189, 138, 36, 0.12);
+  --color-demo-border: rgba(189, 138, 36, 0.40);
 
   /* ── Focus ────────────────────────────────────────────────────────────── */
-  --color-focus-ring: #7fb0ff;
-  --focus-ring: 0 0 0 2px var(--color-bg-base), 0 0 0 4px var(--color-focus-ring);
+  --color-focus-ring: #77a8dc;
+  --focus-ring: 0 0 0 2px var(--color-bg-base), 0 0 0 3px var(--color-focus-ring);
 
   /* ── Typography ───────────────────────────────────────────────────────── */
   --font-ui: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue",
@@ -87,15 +112,17 @@
   --font-mono: "JetBrains Mono", "SFMono-Regular", "Cascadia Mono", Consolas,
     "Liberation Mono", monospace;
 
-  --text-2xs: 0.6875rem;  /* 11px — table meta, chip text     */
-  --text-xs: 0.75rem;     /* 12px — labels, captions          */
-  --text-sm: 0.8125rem;   /* 13px — table body, dense UI      */
-  --text-base: 0.9375rem; /* 15px — body copy                 */
-  --text-md: 1.0625rem;   /* 17px — BLUF body                 */
-  --text-lg: 1.25rem;     /* 20px — panel titles              */
-  --text-xl: 1.5rem;      /* 24px — page titles               */
-  --text-2xl: 2rem;       /* 32px — stat values               */
-  --text-3xl: 2.5rem;     /* 40px — hero stat values          */
+  /* Readable beats technical-looking: the smallest sizes are reserved for
+     genuine metadata labels, never for values a user has to read. */
+  --text-2xs: 0.6875rem;  /* 11px — uppercase metadata labels only          */
+  --text-xs:  0.8125rem;  /* 13px — dense table cells, captions             */
+  --text-sm:  0.875rem;   /* 14px — secondary copy                         */
+  --text-base: 0.9375rem; /* 15px — body                                    */
+  --text-md:  1.0625rem;  /* 17px — lead paragraphs, BLUF                   */
+  --text-lg:  1.25rem;    /* 20px — section values                          */
+  --text-xl:  1.5rem;     /* 24px — page title                              */
+  --text-2xl: 1.875rem;   /* 30px — headline figures                        */
+  --text-3xl: 2.25rem;    /* 36px — posture verdict                         */
 
   --leading-tight: 1.2;
   --leading-snug: 1.4;
@@ -106,8 +133,8 @@
   --weight-semibold: 600;
   --weight-bold: 700;
 
-  --tracking-wide: 0.06em;   /* uppercase eyebrow labels */
-  --tracking-wider: 0.1em;
+  --tracking-wide: 0.07em;
+  --tracking-wider: 0.12em;
 
   /* ── Spacing — 4px base unit ──────────────────────────────────────────── */
   --space-1: 4px;
@@ -121,17 +148,107 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* ── Radius / elevation ───────────────────────────────────────────────── */
-  --radius-sm: 3px;
-  --radius-md: 5px;
-  --radius-lg: 8px;
+  /* Rhythm: related content sits at --space-4, unrelated sections at
+     --space-8. Applied consistently so grouping reads without borders. */
+  --section-gap: var(--space-8);
+
+  /* ── Radius ——— square/tight corners = tactical, not SaaS ─────────────── */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
   --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  /* ── Elevation — used almost nowhere. Hierarchy comes from type. ─────── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 3px 10px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.65);
 
   /* ── Layout ───────────────────────────────────────────────────────────── */
-  --layout-max-width: 1680px;
-  --nav-height: 56px;
+  --layout-max-width: 1560px;
+  --nav-height: 46px;
+  --nav-brand-accent: var(--color-accent);
+  --attack-chain-arrow: var(--color-border-strong);
+}
+
+
+/* =============================================================================
+   LIGHT THEME
+   The same console in a bright room: paper-cool surfaces, the same severity
+   semantics, every hue darkened until it clears AA on white. Nothing moves and
+   nothing changes meaning — only the values below.
+============================================================================= */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* ── Background layers ────────────────────────────────────────────────── */
+  --color-bg-base: #eceff5;          /* app canvas                          */
+  --color-bg-surface: #ffffff;       /* panels, table bodies                */
+  --color-bg-elevated: #f3f6fb;      /* hovered rows, raised surfaces       */
+  --color-bg-inset: #e8edf4;         /* wells, inset regions                */
+  --color-bg-hover: #e7eef8;         /* interactive hover wash              */
+  --color-bg-panel-header: #f2f5fa;  /* panel header row                    */
+  --color-bg-command: #ffffff;       /* nav / command band                  */
+
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --color-text-primary: #111a24;
+  --color-text-secondary: #415263;
+  --color-text-muted: #5a6b7d;
+  --color-text-inverse: #ffffff;
+
+  /* ── Structure ────────────────────────────────────────────────────────── */
+  --color-border: #d1dae5;
+  --color-border-strong: #b0bece;
+  --color-divider: #e3e9f1;
+  --color-grid-line: rgba(176, 190, 206, 0.6);
+
+  /* ── SEVERITY ramp — darkened for white surfaces ─────────────────────── */
+  --color-critical: #c2211c;
+  --color-critical-bg: rgba(194, 33, 28, 0.08);
+  --color-critical-border: rgba(194, 33, 28, 0.38);
+
+  --color-high: #a1540a;
+  --color-high-bg: rgba(161, 84, 10, 0.09);
+  --color-high-border: rgba(161, 84, 10, 0.36);
+
+  --color-medium: #7a5c05;
+  --color-medium-bg: rgba(122, 92, 5, 0.09);
+  --color-medium-border: rgba(122, 92, 5, 0.32);
+
+  --color-low: #4e6274;
+  --color-low-bg: rgba(78, 98, 116, 0.10);
+  --color-low-border: rgba(78, 98, 116, 0.34);
+
+  /* ── CONFIDENCE ──────────────────────────────────────────────────────── */
+  --color-confidence: #0c7a70;
+  --color-confidence-bg: rgba(12, 122, 112, 0.08);
+  --color-confidence-border: rgba(12, 122, 112, 0.34);
+  --color-confidence-track: #dde7e8;
+
+  /* ── Accent ──────────────────────────────────────────────────────────── */
+  --color-accent: #1a5fa8;
+  --color-accent-hover: #15528f;
+  --color-accent-active: #113f6f;
+  --color-accent-bg: rgba(26, 95, 168, 0.09);
+  --color-accent-border: rgba(26, 95, 168, 0.38);
+  --color-on-accent: #ffffff;
+
+  --color-source-bar: #7b91a8;
+
+  /* ── Status feedback ─────────────────────────────────────────────────── */
+  --color-success: #1c7a34;
+  --color-success-bg: rgba(28, 122, 52, 0.09);
+  --color-danger: #c2211c;
+  --color-warning: #7a5c05;
+  --color-demo: #8a6410;
+  --color-demo-bg: rgba(138, 100, 16, 0.12);
+  --color-demo-border: rgba(138, 100, 16, 0.40);
+
+  /* ── Focus ────────────────────────────────────────────────────────────── */
+  --color-focus-ring: #1a5fa8;
+  --focus-ring: 0 0 0 2px var(--color-bg-surface), 0 0 0 3px var(--color-focus-ring);
+
+  /* ── Elevation — barely there, as on the dark theme ──────────────────── */
+  --shadow-sm: 0 1px 2px rgba(17, 26, 36, 0.08);
+  --shadow-md: 0 3px 10px rgba(17, 26, 36, 0.10);
+  --shadow-lg: 0 10px 28px rgba(17, 26, 36, 0.14);
 }

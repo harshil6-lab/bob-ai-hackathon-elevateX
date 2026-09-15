@@ -17,8 +17,12 @@ import { confidencePercent } from '../types/incident';
 export interface ConfidenceIndicatorProps {
   /** 0-100 integer (per AGENTS.md) — a 0-1 float is also tolerated. */
   confidence: number | null | undefined;
-  /** `bar` for cards and detail panels, `compact` for dense table cells. */
-  variant?: 'bar' | 'compact';
+  /**
+   * `bar` for detail panels, `compact` for dense table cells, `inline` for a
+   * headline where the percentage and its band are the whole message and a
+   * meter would compete with the severity indicator next to it.
+   */
+  variant?: 'bar' | 'compact' | 'inline';
   className?: string;
 }
 
@@ -47,6 +51,20 @@ export function ConfidenceIndicator({
 
   const percent = confidencePercent(confidence);
   const band = confidenceBand(percent);
+
+  if (variant === 'inline') {
+    // No track: severity must stay the strongest signal in the row that holds
+    // this. The band word carries the meaning without a competing bar.
+    return (
+      <div className={`confidence confidence--inline${className ? ` ${className}` : ''}`}>
+        <span className="confidence__label">Confidence</span>
+        <span className="confidence__inline-value">
+          <span className="confidence__value mono">{percent}%</span>
+          <span className="confidence__band">{band}</span>
+        </span>
+      </div>
+    );
+  }
 
   if (variant === 'compact') {
     return (

@@ -99,7 +99,7 @@ describe('IncidentDetail — BLUF', () => {
     await screen.findByRole('heading', { name: 'BLUF' });
 
     const order = Array.from(
-      container.querySelectorAll('.bluf, .assessment, .detail-grid'),
+      container.querySelectorAll('.bluf, .incident-facts, .detail-grid'),
     ).map((el) => el.className.split(' ')[0]);
 
     expect(order[0]).toBe('bluf');
@@ -115,24 +115,24 @@ describe('IncidentDetail — assessment and context', () => {
     const { container } = renderDetail();
     await screen.findByRole('heading', { name: 'BLUF' });
 
-    const assessment = container.querySelector('.assessment') as HTMLElement;
-    expect(within(assessment).getByText('Critical')).toBeInTheDocument();
-    expect(within(assessment).getByText('94%')).toBeInTheDocument();
-    expect(within(assessment).getByText('investigating')).toBeInTheDocument();
+    const facts = container.querySelector('.incident-facts') as HTMLElement;
+    expect(within(facts).getByText('Critical')).toBeInTheDocument();
+    expect(within(facts).getByText('94%')).toBeInTheDocument();
+    expect(within(facts).getByText('investigating')).toBeInTheDocument();
 
     // Severity is a badge; confidence is a meter. Different primitives.
-    expect(assessment.querySelector('.severity-badge')).toBeTruthy();
-    expect(within(assessment).getByRole('meter')).toBeTruthy();
+    expect(facts.querySelector('.severity-badge')).toBeTruthy();
+    expect(within(facts).getByRole('meter')).toBeTruthy();
   });
 
   it('shows affected assets, alert count and sources', async () => {
     const { container } = renderDetail();
     await screen.findByRole('heading', { name: 'BLUF' });
 
-    const strip = container.querySelector('.context-strip') as HTMLElement;
-    expect(within(strip).getByText('SERVER-17, FILE-SRV-31')).toBeInTheDocument();
-    expect(within(strip).getByText('7')).toBeInTheDocument();
-    expect(within(strip).getByText('SIEM, NETWORK_SENSOR, THREAT_INTEL')).toBeInTheDocument();
+    const facts = container.querySelector('.incident-facts') as HTMLElement;
+    expect(within(facts).getByText('SERVER-17, FILE-SRV-31')).toBeInTheDocument();
+    expect(within(facts).getByText('7')).toBeInTheDocument();
+    expect(within(facts).getByText('SIEM, NETWORK_SENSOR, THREAT_INTEL')).toBeInTheDocument();
   });
 });
 
